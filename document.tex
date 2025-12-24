@@ -1,0 +1,346 @@
+\documentclass{beamer}
+
+% ===============================
+% Theme and Packages
+% ===============================
+\usetheme{Madrid}
+\usecolortheme{default}
+\usefonttheme{professionalfonts}
+
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{setspace}
+
+% ===============================
+% Title Information
+% ===============================
+\title[Towards Automated Circuit Discovery]{Towards Automated Circuit Discovery\\for Mechanistic Interpretability}
+\date{}
+
+% ===============================
+% Document
+% ===============================
+\begin{document}
+	
+	%------------------------------------------------
+	% Title Slide
+	%------------------------------------------------
+	\begin{frame}
+		\centering
+		{\Large\bfseries Towards Automated Circuit Discovery\\[4pt]
+			for Mechanistic Interpretability}
+		
+		\vspace{20pt}
+		
+		{\small
+			Arthur Conmy, Augustine N. Mavor-Parker, Aengus Lynch,\\
+			Stefan Heimersheim, Adri\`a Garriga-Alonso}
+		
+		\vspace{8pt}
+		
+		\vfill
+		
+		{\small
+			Presented by: \textbf{Anbuselvi S}}
+	\end{frame}
+	
+	%------------------------------------------------
+	% Motivation and Interpretability
+	%------------------------------------------------
+	\begin{frame}{Motivation and Interpretability}
+		\begin{itemize}
+			\setstretch{1.4}
+			\item Rapid progress in \textbf{transformer language models}
+			has led to new and complex emergent capabilities.
+			\item Despite strong predictors of performance, transformers
+			remain widely viewed as \textbf{black-box models}.
+			\item Interpretability research seeks to:
+			\begin{itemize}
+				\item demystify model behavior
+				\item explain outputs using domain-relevant concepts
+			\end{itemize}
+			\item \textbf{Mechanistic interpretability} focuses on
+			reverse-engineering model internals into
+			\textbf{human-understandable algorithms}.
+		\end{itemize}
+	\end{frame}
+	
+	%------------------------------------------------
+	% Circuits and Contributions
+	%------------------------------------------------
+	\begin{frame}{Circuits and Contributions}
+		\begin{itemize}
+			\setstretch{1.4}
+			\item Model behaviors are implemented by algorithms
+			within the model’s \textbf{computational graph}.
+			\item \textbf{Circuits} are subgraphs that capture
+			the majority of a specific behavior.
+			\item Existing circuit discovery relies heavily on
+			\textbf{manual human inspection}, limiting scalability.
+			\item This work:
+			\begin{itemize}
+				\item systematizes a common interpretability workflow
+				\item automates circuit extraction via
+				\textbf{Automatic Circuit DisCovery (ACDC)}
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
+	%------------------------------------------------
+	% Introduction: This Work and Contributions
+	%------------------------------------------------
+	\begin{frame}{Introduction: This Work and Contributions}
+		\begin{itemize}
+			\setstretch{1.5}
+			\item This work identifies a common \textbf{workflow}
+			for circuit-based interpretability research.
+			\item It automates circuit extraction by introducing:
+			\begin{itemize}
+				\item \textbf{Automatic Circuit DisCovery (ACDC)}
+			\end{itemize}
+			\item It also adapts:
+			\begin{itemize}
+				\item Subnetwork Probing (SP)
+				\item Head Importance Score for Pruning (HISP)
+			\end{itemize}
+			\item Quantitative metrics are introduced to evaluate
+			circuit extraction quality.
+		\end{itemize}
+	\end{frame}
+	
+	%------------------------------------------------
+	% Mechanistic Interpretability Workflow Diagram
+	%------------------------------------------------
+	\begin{frame}{Mechanistic Interpretability Workflow}
+		\centering
+		\includegraphics[width=0.9\textwidth]{fig2.png}
+		
+		\vspace{6pt}
+		\scriptsize
+		A common three-step workflow for circuit discovery observed across
+		mechanistic interpretability studies, with ACDC automating the
+		patching and pruning step.
+	\end{frame}
+	
+	%------------------------------------------------
+	% Example Figure
+	%------------------------------------------------
+	\begin{frame}{}
+		\centering
+		\includegraphics[width=0.75\textwidth]{fig1.png}
+		
+		\vspace{6pt}
+		\scriptsize
+		Automatic Circuit Discovery (ACDC) applied to GPT-2 Small for the Greater-Than operation.
+	\end{frame}
+	
+	%------------------------------------------------
+	% Section 2: Overview
+	%------------------------------------------------
+	\begin{frame}{Mechanistic Interpretability Workflow}
+		\begin{itemize}
+			\setstretch{1.5}
+			\item Mechanistic interpretability aims to explain and predict
+			neural network behavior by understanding the
+			\textbf{algorithms implemented within the model}.
+			\item Neural network behaviors are realized through
+			algorithms embedded in the model’s
+			\textbf{computational graph}.
+			\item Prior work has identified \textbf{circuits}:
+			\begin{itemize}
+				\item subgraphs that capture the majority of a specific behavior
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
+	%------------------------------------------------
+	% Section 2: Concrete Example — Greater-Than Task
+	%------------------------------------------------
+	\begin{frame}{Example: Greater-Than Task}
+		\begin{itemize}
+			\setstretch{1.5}
+			\item Prior work studies GPT-2 Small using prompts such as:
+			\begin{itemize}
+				\item ``The war lasted from 1517 to 15''
+			\end{itemize}
+			\item The model completes with:
+			\begin{itemize}
+				\item ``18'', ``19'', or larger numbers
+				\item but not ``17'' or smaller
+			\end{itemize}
+			\item This behavior is referred to as the
+			\textbf{Greater-Than task}.
+		\end{itemize}
+	\end{frame}
+	
+	%------------------------------------------------
+	% Section 2: Dataset and Metric
+	%------------------------------------------------
+	\begin{frame}{Dataset and Metric Definition}
+		\begin{itemize}
+			\setstretch{1.5}
+			\item The behavior is measured by comparing:
+			\begin{itemize}
+				\item probability assigned to numbers greater than 17
+				\item versus probability assigned to 17 or smaller
+			\end{itemize}
+			\item A \textbf{corrupted dataset} is constructed:
+			\begin{itemize}
+				\item the ``01-dataset''
+				\item removes bias toward particular two-digit completions
+			\end{itemize}
+			\item These datasets are used for
+			\textbf{post-hoc interpretability}, not training.
+		\end{itemize}
+	\end{frame}
+	
+	%------------------------------------------------
+	% Section 2: Circuit Identification
+	%------------------------------------------------
+	\begin{frame}{Identifying Circuit Components}
+		\begin{itemize}
+			\setstretch{1.5}
+			\item Researchers attribute the Greater-Than operation to:
+			\begin{itemize}
+				\item late-layer MLPs
+				\item earlier attention heads identifying numerical values
+			\end{itemize}
+			\item Components are interpreted functionally:
+			\begin{itemize}
+				\item early components respond to the ``17'' token
+				\item later components amplify logits for numbers greater than 17
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
+	%------------------------------------------------
+	% Step 1: Behavior, Dataset, Metric
+	%------------------------------------------------
+	\begin{frame}{Step 1: Select Behavior, Dataset, and Metric}
+		\begin{itemize}
+			\setstretch{1.4}
+			\item Choose a \textbf{clearly defined neural network behavior}
+			to analyze.
+			\item Curate a dataset that \textbf{reliably elicits this behavior}
+			from the trained model.
+			\item Define a metric that \textbf{quantifies task performance}.
+			\item Focusing on a specific task simplifies interpretation by
+			avoiding mixtures of unrelated circuits.
+		\end{itemize}
+		
+		\vspace{4pt}
+		\scriptsize
+		Full-distribution behavior analysis is currently intractable for
+		language models; hence, most work focuses on individual tasks.
+	\end{frame}
+	
+		%------------------------------------------------
+	% Example Figure
+	%------------------------------------------------
+	\begin{frame}{}
+		\centering
+		\includegraphics[width=0.75\textwidth]{fig3.png}
+		
+		\vspace{6pt}
+		\scriptsize
+		Behavior-specific datasets and metrics are defined to isolate a single model behavior for analysis.
+	\end{frame}
+	
+	%------------------------------------------------
+	% Step 2: Computational Graph
+	%------------------------------------------------
+	\begin{frame}{Step 2: Computational Graph Representation}
+		\begin{itemize}
+			\setstretch{1.4}
+			\item To find circuits, the model is represented as a
+			\textbf{directed acyclic computational graph (DAG)}.
+			\item The level of abstraction depends on the explanation goal:
+			\begin{itemize}
+				\item attention heads and MLP layers (coarse)
+				\item query/key/value activations
+				\item individual neurons
+				\item token-position-specific nodes (fine-grained)
+			\end{itemize}
+			\item Nodes represent components; edges represent information flow.
+		\end{itemize}
+	\end{frame}
+	
+	%------------------------------------------------
+	% Example Figure
+	%------------------------------------------------
+	\begin{frame}{}
+		\centering
+		\includegraphics[width=1.\textwidth]{fig4.png}
+		
+		\vspace{6pt}
+		\scriptsize
+		Abstraction of the neural network into a computational graph for circuit discovery.
+	\end{frame}
+	
+	%------------------------------------------------
+	% Step 3: Activation Patching
+	%------------------------------------------------
+	\begin{frame}{Step 3: Circuit Extraction via Activation Patching}
+		\begin{itemize}
+			\setstretch{1.4}
+			\item With the computational graph fixed, circuit extraction
+			proceeds by \textbf{recursive activation patching}.
+			\item For each node or edge:
+			\begin{enumerate}
+				\item overwrite the activation with a corrupted value
+				\item run a forward pass
+				\item measure performance change using the chosen metric
+			\end{enumerate}
+			\item Start from the output node and recurse backward.
+		\end{itemize}
+	\end{frame}
+	
+	%------------------------------------------------
+	% Step 4: Circuit Interpretation
+	%------------------------------------------------
+	\begin{frame}{Step 4: Explaining Circuit Components}
+		\begin{itemize}
+			\setstretch{1.4}
+			\item After isolating a minimal subgraph, a \textbf{circuit}
+			has been identified.
+			\item Researchers then:
+			\begin{itemize}
+				\item formulate hypotheses about component functions
+				\item test these hypotheses experimentally
+			\end{itemize}
+			\item ACDC focuses on automating the time-consuming
+			\textbf{circuit extraction step}.
+			\item Automating functional interpretation remains an
+			open research direction.
+		\end{itemize}
+	\end{frame}
+	
+	%------------------------------------------------
+	% ACDC Procedure Summary
+	%------------------------------------------------
+	\begin{frame}{How ACDC Works (Summary)}
+		\begin{itemize}
+			\setstretch{1.4}
+			\item Step a: specify task, computational graph, and threshold $\tau$.
+			\item Step b: evaluate each connection by activation patching.
+			\item Step c: prune connections with metric impact below $\tau$.
+			\item Recursively apply until the full circuit is recovered.
+		\end{itemize}
+		
+		\vspace{4pt}
+		\scriptsize
+		
+		ACDC returns a minimal subgraph that preserves task performance.
+	\end{frame}
+	
+	%------------------------------------------------
+	% Thank You Slide
+	%------------------------------------------------
+	\begin{frame}
+		\centering
+		\Large Thank You
+	\end{frame}
+	
+\end{document}
