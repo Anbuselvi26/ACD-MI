@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2025.12.9)  30 DEC 2025 15:25
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2025.12.9)  31 DEC 2025 16:24
  restricted system commands enabled.
 **document.tex
 (./document.tex
@@ -785,31 +785,31 @@ Inserting `l3color' in `luaotfload.parse_color'.
 (./document.aux)
 \openout1 = document.aux
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 46.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 4
-6.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 1
+7.
  (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: luatex
@@ -867,7 +867,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 46.
+Package hyperref Info: Link coloring OFF on input line 17.
 
 (./document.out) (./document.out)
 \@outlinefile=\write5
@@ -897,39 +897,40 @@ Dictionary: translator-numbers-dictionary, Language: English
 (/usr/share/texlive/texmf-dist/tex/latex/translator/translator-theorem-dictiona
 ry-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
-) (./document.nav)
-Overfull \hbox (79.32726pt too wide) in paragraph at lines 46--46
- [][][][]  
- []
+) (./document.nav) [1
 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2
 
-Overfull \hbox (79.32726pt too wide) in paragraph at lines 58--58
- [][][][]  
- []
+]
+LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <10> not available
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 82.
+ [3
 
-<images.png, id=15, 225.84375pt x 225.84375pt>
-File: images.png Graphic file (type png)
-<use images.png>
-Package luatex.def Info: images.png  used on input line 58.
-(luatex.def)             Requested size: 20.53688pt x 20.53526pt.
+] [4
 
-Overfull \hbox (79.32726pt too wide) has occurred while \output is active
- [][][][]  
- []
+] [5
 
-[1
+] [6
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}<./images.png>]
-Overfull \hbox (79.32726pt too wide) in paragraph at lines 66--66
- [][][][]  
- []
+] [7
 
+] [8
 
-Overfull \hbox (79.32726pt too wide) has occurred while \output is active
- [][][][]  
- []
+] [9
 
-[2
+]
+<img.png, id=281, 928.46875pt x 659.46375pt>
+File: img.png Graphic file (type png)
+<use img.png>
+Package luatex.def Info: img.png  used on input line 211.
+(luatex.def)             Requested size: 273.83733pt x 194.49986pt.
+ [10
+
+<./img.png>] [11
+
+] [12
+
+] [13
 
 ]
 \tf@nav=\write6
@@ -941,7 +942,8 @@ Overfull \hbox (79.32726pt too wide) has occurred while \output is active
 \tf@snm=\write8
 
 \openout8 = document.snm
- (./document.aux)
+
+(./document.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -951,27 +953,23 @@ Package rerunfilecheck Info: File `document.out' has not changed.
 )
 
 Here is how much of LuaTeX's memory you used:
- 22334 strings out of 476553
+ 22314 strings out of 476553
  100000,1977958 words of node,token memory allocated
  995 words of node memory still in use:
    13 hlist, 6 vlist, 2 rule, 1 local_par, 16 glue, 5 kern, 8 penalty, 10 glyph,
  25 attribute, 75 glue_spec, 25 attribute_list, 4 write, 4 pdf_colorstack nodes
-   avail lists: 2:912,3:644,4:337,5:251,6:109,7:2651,9:754,10:3,11:222
- 43591 multiletter control sequences out of 65536+600000
- 23 fonts using 1776935 bytes
- 128i,15n,116p,382b,657s stack positions out of 10000i,1000n,20000p,200000b,200000s
+   avail lists: 2:834,3:342,4:336,5:261,6:70,7:1962,9:575,10:10,11:145
+ 43551 multiletter control sequences out of 65536+600000
+ 26 fonts using 2172063 bytes
+ 128i,15n,116p,382b,651s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf/fonts/opentype/public/lm/lmsans10-oblique.otf></usr/share/texm
+f/fonts/opentype/public/lm/lmsans12-regular.otf></usr/share/texmf/fonts/opentype
+/public/lm/lmsans8-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmsans
+10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmsans10-bold.otf>
+Output written on document.pdf (13 pages, 736397 bytes).
 
-warning  (pdf backend): unreferenced destination with name 'Navigation3'
-
-warning  (pdf backend): unreferenced destination with name 'Navigation5'
-</usr/share/texmf/fonts/opentype/public/lm/lmsans12-regular.otf></usr/share/texm
-f/fonts/opentype/public/lm/lmsans8-regular.otf></usr/share/texmf/fonts/opentype/
-public/lm/lmsans10-regular.otf></usr/share/texmf/fonts/opentype/public/lm/lmsans
-10-bold.otf>
-Output written on document.pdf (2 pages, 30826 bytes).
-
-PDF statistics: 119 PDF objects out of 1000 (max. 8388607)
- 85 compressed objects within 1 object stream
- 7 named destinations out of 1000 (max. 131072)
- 76 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 428 PDF objects out of 1000 (max. 8388607)
+ 371 compressed objects within 4 object streams
+ 27 named destinations out of 1000 (max. 131072)
+ 36 words of extra memory for PDF output out of 10000 (max. 100000000)
 
