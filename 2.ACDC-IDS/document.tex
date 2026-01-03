@@ -9,6 +9,10 @@
 \usepackage{ragged2e}
 \usepackage{booktabs}
 \usepackage{lmodern}
+\usepackage[backend=biber,style=ieee]{biblatex}
+\addbibresource{references.bib}
+\usepackage{hyperref}
+
 
 % --- Meta Data ---
 \title[ACDC for NIDS]{Automated Circuit Discovery for NIDS}
@@ -30,16 +34,66 @@
 	% --- SECTION 1: MOTIVATION ---
 	\section{Motivation \& Background}
 	
-	% Slide 2
-	\begin{frame}{The Interpretability Gap in NIDS}
+	\begin{frame}{Motivation: The Interpretability Gap in Network Security}
 		\begin{itemize}
-			\setstretch{1.3}
-			\item \justifying Modern NIDS use Deep Learning (Transformers/RNNs) for high accuracy.
-			\item \justifying \textbf{The Black-Box Problem:} Analysts receive alerts but cannot verify the causal logic.
-			\item \justifying \textbf{SOC Impact:} High false-positive rates and lack of trust in "AI-driven" security.
-			\item \justifying \textbf{Solution:} Mechanistic Interpretability to reverse-engineer model internals.
-			\item \justifying This motivates causal—not correlational—explanations.
+			\setstretch{1.4}
+			\item \justifying Modern network security systems increasingly rely on
+			\textbf{deep learning } models for automated threat detection.
+			
+			\item \justifying \textbf{The Black-Box Problem:} These models generate alerts,
+			but their \textbf{internal decision logic } is opaque to human analysts.
+			
+			\item \justifying \textbf{Operational Impact:} Security teams face
+			\textbf{high false-positive rates}.
+			
+			\item \justifying \textbf{Key Challenge:} Understanding \emph{why} a model
+			raises an alert, not just \emph{that} it raises one.
+			
+			\item \justifying Motivation:
+			\textbf{causal interpretability} > correlational explanations.
 		\end{itemize}
+	\end{frame}
+	
+	% Slide 2
+	\begin{frame}{What is a Network Intrusion Detection System (NIDS)}
+		\justifying
+		\setstretch{1.3}
+		\begin{itemize}
+			\item \justifying A \textbf{Network Intrusion Detection System (NIDS)} monitors
+			network traffic to identify \textbf{malicious activities or intrusions}.
+			
+			\item \justifying It analyzes \textbf{packets, flows, and traffic patterns}
+			traversing the network.
+			
+			\item \justifying NIDS raises alerts when observed traffic deviates from
+			\textbf{normal or expected behavior}.
+			
+			\item \justifying It supports \textbf{Security Operations Centers (SOC)}
+			in detecting attacks such as DoS, scanning, malware, and data exfiltration.
+		\end{itemize}
+		
+		\vspace{0.3cm}
+		\textbf{Key idea:}
+		\begin{center}
+			``Is this network traffic normal or malicious?''
+		\end{center}
+	\end{frame}
+	
+	\begin{frame}{Network Intrusion Detection System (NIDS)}
+		\centering
+		\includegraphics[width=0.75\textwidth]{7.png}
+		
+		\vspace{0.2cm}
+		\scriptsize
+		High-level architecture of a Network Intrusion Detection System.
+	\end{frame}
+	
+	\begin{frame}{Explainability Landscape for Intrusion Detection}
+		\centering
+		\includegraphics[width=0.9\textwidth]{5.png}
+		
+		\vspace{0.3cm}
+		{\scriptsize High-level taxonomy of explainability approaches for intrusion detection systems}
 	\end{frame}
 	
 	% Slide 3
@@ -93,7 +147,7 @@
 	% Slide 4
 	\begin{frame}{Applying ACDC to NIDS: Core Idea}
 		\begin{itemize}
-			\setstretch{1.3}
+			\setstretch{1.4}
 			\item In NIDS, the target behavior is an \textbf{attack detection decision}
 			(e.g., SYN flood, scan, exfiltration).
 			
@@ -194,9 +248,64 @@
 		\justifying Behavior is quantified using the logit difference between Attack and Normal classes.
 	\end{frame}
 	
+	\begin{frame}{Datasets for Attack-Specific Circuit Discovery}
+		\footnotesize
+		\centering
+		
+		\textbf{(a) Basic statistics of datasets}
+		
+		\vspace{0.25cm}
+		\begin{tabular}{lccc}
+			\toprule
+			\textbf{Dataset} &
+			\textbf{Labels} &
+			\textbf{Features} &
+			\textbf{Samples} \\
+			\midrule
+			CICIDS-2017 & 7 & 78 & 2.78M \\
+			RoEduNet-SIMARGL2021 & 3 & 29 & 31.43M \\
+			NSL-KDD & 5 & 41 & 148K \\
+			\bottomrule
+		\end{tabular}
+		
+		\vspace{0.5cm}
+		
+		\textbf{(b) Distribution of samples across attack types}
+		\tiny
+		\vspace{0.25cm}
+		\begin{tabular}{lcccccccc}
+			\toprule
+			\textbf{Dataset} &
+			\textbf{Normal} &
+			\textbf{DoS} &
+			\textbf{PortScan} &
+			\textbf{Brute} &
+			\textbf{Web} &
+			\textbf{Bot} &
+			\textbf{Probe} &
+			\textbf{U2R} \\
+			\midrule
+			CICIDS-2017 &
+			84.4\% & 9.1\% & 5.7\% & 0.5\% & 0.16\% & 0.07\% & -- & -- \\
+			
+			RoEduNet-SIMARGL2021 &
+			62.2\% & 24.5\% & 13.3\% & -- & -- & -- & -- & -- \\
+			
+			NSL-KDD &
+			48.0\% & 35.0\% & -- & -- & -- & -- & 10.1\% & 0.47\% \\
+			\bottomrule
+		\end{tabular}
+		
+		\vspace{0.3cm}
+		{\scriptsize
+			These datasets enable attack-specific behavior isolation and evaluation
+			of circuit faithfulness under realistic class imbalance.
+		}
+	\end{frame}
+	
 	% Slide 10
 	\begin{frame}{Step B: Pruning Criterion ($\tau$)}
-		ACDC removes an internal connection ($w \rightarrow v$) if it does not
+		\justifying ACDC removes an internal connection ($w \rightarrow v$) if it does not
 		causally influence the attack detection outcome.
 		
 		\vfill
@@ -212,23 +321,23 @@
 		\end{itemize}
 		
 		\vspace{0.4cm}
-		KL divergence ensures the circuit preserves the \textbf{decision logic},
+		\justifying KL divergence ensures the circuit preserves the \textbf{decision logic},
 		not merely classification accuracy.
 	\end{frame}
 	
 	\begin{frame}{Step C: Activation Patching}
 		\begin{itemize}
 			\setstretch{1.4}
-			\item Internal activations from \textbf{corrupted (benign) traffic}
+			\item \justifying Internal activations from \textbf{corrupted (benign) traffic}
 			are injected into the forward pass of \textbf{malicious traffic}.
 			
-			\item If the attack prediction remains unchanged, the patched
+			\item \justifying If the attack prediction remains unchanged, the patched
 			connection is \textbf{not causally required} for detection.
 			
-			\item This allows ACDC to distinguish
+			\item \justifying This allows ACDC to distinguish
 			\textbf{true attack logic} from incidental correlations.
 			
-			\item \textbf{Example:} replacing SYN packet-rate activations
+			\item \justifying \textbf{Example:} replacing SYN packet-rate activations
 			with statistics from normal background traffic.
 		\end{itemize}
 	\end{frame}
@@ -240,7 +349,7 @@
 	\begin{frame}{Research: Generalization vs. Spurious Correlation}
 		\begin{itemize}
 			\setstretch{1.5}
-			\item Does the NIDS learn \textbf{attack-relevant traffic patterns}
+			\item Does the train NIDS learn \textbf{attack-relevant traffic patterns}
 			(e.g., TCP flags, packet-rate bursts, temporal structure)?
 			
 			\item Or does it rely on \textbf{incidental identifiers}
@@ -258,7 +367,7 @@
 	\begin{frame}{Example: Circuit Discovery for DDoS Detection}
 		\begin{itemize}
 			\setstretch{1.6}
-			\item Consider a trained NIDS tasked with detecting \textbf{volumetric DDoS attacks}.
+			\item \justifying Consider a trained NIDS tasked with detecting \textbf{volumetric DDoS attacks}.
 			
 			\item ACDC isolates a \textbf{minimal detection circuit} that:
 			\begin{itemize}
@@ -267,7 +376,7 @@
 				\item suppresses protocol-specific and benign background noise.
 			\end{itemize}
 			
-			\item This circuit constitutes the \textbf{causal computation}
+			\item \justifying This circuit constitutes the \textbf{causal computation}
 			sufficient for triggering a DDoS alert.
 		\end{itemize}
 	\end{frame}
@@ -283,22 +392,22 @@
 	\end{frame}
 	
 	% Slide 16
-	\begin{frame}{Research: Adversarial Attack Resilience}
-		\setstretch{1.6}
-		\justifying
+%	\begin{frame}{Research: Adversarial Attack Resilience}
+	%	\setstretch{1.6}
+	%	\justifying
 		
-		\begin{itemize}
-			\item Adversarial traffic can induce \textbf{pathway divergence},
-			activating internal circuits normally associated with benign traffic.
+	%	\begin{itemize}
+		%	\item Adversarial traffic can induce \textbf{pathway divergence},
+		%	activating internal circuits normally associated with benign traffic.
 			
-			\item \textbf{Research Question:}
-			To what extent can adversarial perturbations reroute computation
-			away from the attack-specific circuit while preserving normal-traffic pathways?
+		%	\item \textbf{Research Question:}
+		%	To what extent can adversarial perturbations reroute computation
+		%	away from the attack-specific circuit while preserving normal-traffic pathways?
 			
-			\item ACDC enables \textbf{circuit-level robustness analysis}
-			by explicitly identifying which internal pathways are disrupted.
-		\end{itemize}
-	\end{frame}
+		%	\item ACDC enables \textbf{circuit-level robustness analysis}
+		%	by explicitly identifying which internal pathways are disrupted.
+		%\end{itemize}
+%	\end{frame}
 	
 	% Slide 17
 	\begin{frame}{Technical Challenge: Scalability}
@@ -306,14 +415,14 @@
 		\justifying
 		
 		\begin{itemize}
-			\item Activation patching is computationally expensive
+			\item \justifying  Activation patching is computationally expensive
 			for high-throughput network traffic.
 			
-			\item \textbf{Research Focus:}
+			\item \justifying \textbf{Research Focus:}
 			Attribution patching to approximate circuit importance
 			with significantly reduced computational cost.
 			
-			\item As a result, ACDC is currently suited for
+			\item \justifying As a result, ACDC is currently suited for
 			\textbf{offline analysis and post-incident investigation},
 			rather than inline detection.
 		\end{itemize}
@@ -323,17 +432,18 @@
 	\begin{frame}{Failure Case: The OR-Gate Problem}
 		\begin{itemize}
 			\setstretch{1.4}
-			\item A NIDS may contain \textbf{redundant internal pathways}
+			\item \justifying A NIDS may contain \textbf{redundant internal pathways}
 			that independently support the same attack detection.
 			
-			\item If removing one pathway does not degrade detection performance,
+			\item \justifying If removing one pathway does not degrade detection performance,
 			ACDC may incorrectly prune both during causal testing.
 			
-			\item This does not indicate model failure, but highlights
+			\item \justifying This does not indicate model failure, but highlights
 			\textbf{redundancy in the learned detection logic}.
 			
-			\item Addressing such redundancy remains an open research problem
+			\item \justifying Addressing such redundancy remains an open research problem
 			in circuit discovery methods.
+			\item \justifying This is a limitation of greedy causal pruning, not a model error.
 		\end{itemize}
 	\end{frame}	
 	
@@ -341,7 +451,7 @@
 	\section{SOC-Oriented Integration}
 	
 	% Slide 19
-	\begin{frame}{System Design: ACDC-Enabled NIDS}
+	\begin{frame}{SOC Integration: System Design}
 		\centering
 		\includegraphics[width=1\textwidth]{3.png}
 		
@@ -366,14 +476,14 @@
 	\begin{frame}{Automated Forensics for Tier-3 Analysts}
 		\begin{itemize}
 			\setstretch{1.3}
-			\item For each detected attack, ACDC extracts the
+			\item \justifying For each detected attack, ACDC extracts the
 			\textbf{internal detection circuit} used by the NIDS.
 			
-			\item Analysts can inspect the \textbf{behavioral logic}
+			\item \justifying Analysts can inspect the \textbf{behavioral logic}
 			(e.g., traffic patterns and internal interactions)
 			that triggered the alert.
 			
-			\item This supports \textbf{faster root-cause analysis}
+			\item \justifying This supports \textbf{faster root-cause analysis}
 			for advanced and previously unseen threats.
 		\end{itemize}
 	\end{frame}
@@ -391,6 +501,42 @@
 				\item detection accuracy preservation,
 				\item circuit sparsity.
 			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Evaluating ACDC-Based NIDS: Faithfulness}
+		\begin{itemize}
+			\setstretch{1.4}
+			
+			\item \textbf{Faithfulness:}
+			Does the extracted circuit behave like the full NIDS?
+			
+			\item \justifying \textbf{KL Divergence:}
+			Low divergence indicates preservation of detection logic.
+			
+			\item \justifying \textbf{Logit Margin:}
+			Drop in attack–benign confidence reveals causally important edges.
+			
+			\item \textbf{Sparsity:}
+			Fewer retained edges imply higher interpretability.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Grounded Evaluation in NIDS}
+		\begin{itemize}
+			\setstretch{1.4}
+			
+			\item \textbf{Recovery Quality:}
+			Does the circuit retain true attack-relevant logic?
+			
+			\item \justifying \textbf{ROC-AUC:}
+			Measures separation between relevant and irrelevant components.
+			
+			\item \justifying \textbf{Clean vs Corrupted Traffic:}
+			Correct circuits detect attacks only when malicious features are present.
+			
+			\item \textbf{Q1 / Q2 Check:}
+			Correct logic retained, spurious logic excluded.
 		\end{itemize}
 	\end{frame}
 	
@@ -415,15 +561,21 @@
 	% Slide 14
 	\begin{frame}{Summary}
 		\begin{itemize}
-			\setstretch{1.4}
+			\setstretch{1.6}
 			\justifying
-			\item  Framed Network Intrusion Detection as a \textbf{mechanistic interpretability problem} rather than a black-box prediction task.
+			\item \justifying Framed network intrusion detection as a
+			\textbf{mechanistic interpretability problem}, rather than a black-box
+			prediction task.
 			
-			\item Applied Automatic Circuit Discovery (ACDC) to extract \textbf{causal, attack-specific computational circuits} from trained NIDS models.
+			\item \justifying Applied Automatic Circuit Discovery (ACDC) to extract
+			\textbf{causal, attack-specific computational circuits} from trained NIDS
+			models.
 			
-			\item Demonstrated how circuit-level explanations enable \textbf{auditable, trust-oriented decision support} for SOC operations.
-		\end{itemize}	
+			\item \justifying Demonstrated that circuit-level explanations enable
+			\textbf{auditable and trust-oriented decision support} for SOC operations.
+		\end{itemize}
 	\end{frame}
+	
 	
 	% Slide 25
 	\begin{frame}{Future Directions}
