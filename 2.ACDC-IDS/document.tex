@@ -13,17 +13,24 @@
 \addbibresource{references.bib}
 \usepackage{hyperref}
 
-
 % --- Meta Data ---
 \title[ACDC for NIDS]{Automated Circuit Discovery for NIDS}
-\subtitle{Mechanistic Interpretability for SOC-Oriented Security Research}
-\author{Presented by: \textbf{Anbuselvi S}}
+
+%\scriptsize {Beyond the Black Box: ACDC to Reveal Causality of Network Intrusions}
 
 \begin{document}
 	
 	% Slide 1: Title
 	\begin{frame}
+	%	\vspace{-0.5cm}
 		\titlepage
+		\vspace{-0.5cm}
+		\begin{center}
+			\small
+			Beyond the Black Box: ACDC to Reveal the Causality of Network Intrusions \\
+			\vspace{0.5cm}
+			\small {Presented by: \textbf{Anbuselvi S}}
+		\end{center}
 	\end{frame}
 	
 	% Slide 2: Outline
@@ -86,14 +93,6 @@
 		\vspace{0.2cm}
 		\scriptsize
 		High-level architecture of a Network Intrusion Detection System.
-	\end{frame}
-	
-	\begin{frame}{Explainability Landscape for Intrusion Detection}
-		\centering
-		\includegraphics[width=0.9\textwidth]{5.png}
-		
-		\vspace{0.3cm}
-		{\scriptsize High-level taxonomy of explainability approaches for intrusion detection systems}
 	\end{frame}
 	
 	% Slide 3
@@ -199,29 +198,6 @@
 		\end{tabular}
 	\end{frame}
 	
-	% Slide 6
-	\begin{frame}{The NIDS Computational Graph}
-		\begin{itemize}
-			\setstretch{1.4}
-			\item \justifying The trained NIDS is modeled as a \textbf{directed computational graph}.
-			\vspace{0.3cm}
-			\item \justifying \textbf{Nodes ($V$):} internal processing units such as
-			feature interaction layers, temporal aggregation modules,
-			attention heads, or hidden neurons.
-			
-			\item \justifying\textbf{Edges ($E$):} linear information pathways that propagate
-			traffic signals (e.g., packet rates, flags, burst patterns)
-			across the network.
-			
-			\item \justifying \textbf{Objective:} identify and retain only those edges that are	\textbf{causally necessary} for a specific attack detection behavior.
-		\end{itemize}
-		
-		\vspace{0.4cm}
-		\justifying This abstraction enables circuit discovery across different NIDS architectures
-		(Transformer, RNN, CNN).
-	\end{frame}
-	
-	
 	% Slide 8
 	\begin{frame}{System Architecture: ACDC-Enabled NIDS}
 		\centering
@@ -271,8 +247,8 @@
 		\vspace{0.5cm}
 		
 		\textbf{(b) Distribution of samples across attack types}
+		\vspace{0.5cm}
 		\tiny
-		\vspace{0.25cm}
 		\begin{tabular}{lcccccccc}
 			\toprule
 			\textbf{Dataset} &
@@ -431,21 +407,22 @@
 	% Slide 18
 	\begin{frame}{Failure Case: The OR-Gate Problem}
 		\begin{itemize}
-			\setstretch{1.4}
-			\item \justifying A NIDS may contain \textbf{redundant internal pathways}
-			that independently support the same attack detection.
+			\setstretch{1.35}
 			
-			\item \justifying If removing one pathway does not degrade detection performance,
-			ACDC may incorrectly prune both during causal testing.
+			\item \textbf{Redundancy:}
+			A NIDS may learn multiple internal pathways that independently detect the same attack.
 			
-			\item \justifying This does not indicate model failure, but highlights
-			\textbf{redundancy in the learned detection logic}.
+			\item \textbf{Pruning Risk:}
+			If removing one pathway does not affect performance, ACDC may prune both during causal testing.
 			
-			\item \justifying Addressing such redundancy remains an open research problem
-			in circuit discovery methods.
-			\item \justifying This is a limitation of greedy causal pruning, not a model error.
+			\item \textbf{Interpretation:}
+			This reflects redundancy in detection logic—not model failure.
+			
+			\item \textbf{Research Challenge:}
+			Handling redundant causal pathways remains an open problem in circuit discovery.
 		\end{itemize}
-	\end{frame}	
+	\end{frame}
+	
 	
 	% --- SECTION 4: SOC OPERATIONS ---
 	\section{SOC-Oriented Integration}
@@ -462,7 +439,7 @@
 	
 	% Slide 20
 	\begin{frame}{SOC Integration: Transparent Alerts}
-		Instead of: \textit{Alert: Anomaly detected}
+		\textbf{\color{red}{Traditional Alert:}} \textit{Anomaly detected}
 		\vfill
 		\begin{block}{ACDC-Enhanced Alert}
 			Logic: Observed high SYN count combined with low data payload patterns.\\
@@ -472,71 +449,96 @@
 		Circuits are summarized, not shown raw, to analysts.
 	\end{frame}
 	
-	% Slide 21
-	\begin{frame}{Automated Forensics for Tier-3 Analysts}
+	% Slide 2
+	\begin{frame}{Deep-Dive Forensic Investigation}
+		\setstretch{1.4}
 		\begin{itemize}
-			\setstretch{1.3}
-			\item \justifying For each detected attack, ACDC extracts the
-			\textbf{internal detection circuit} used by the NIDS.
+			\setstretch{1.5}
+			\item \justifying \textbf{Causal Visibility:} For every "Transparent Alert," ACDC allows analysts to expand the view to see the \textbf{internal detection circuit}.
 			
-			\item \justifying Analysts can inspect the \textbf{behavioral logic}
-			(e.g., traffic patterns and internal interactions)
-			that triggered the alert.
+			\item \justifying \textbf{Behavioral Logic:} Analysts can inspect exactly which traffic patterns (e.g., specific packet headers or temporal spikes) interacted to trigger the model's "high-risk" state.
 			
-			\item \justifying This supports \textbf{faster root-cause analysis}
-			for advanced and previously unseen threats.
+			\item  \textbf{Incident Attribution:} Supports faster identification of \textbf{Zero-Day threats} by identifying novel circuit structures that don't match known attack signatures.
 		\end{itemize}
 	\end{frame}
 	
-	% Slide 22
-	\begin{frame}{Logic-Based Filter Tuning and Evaluation}
+	\begin{frame}{Circuit Level Debugging for NIDS Models}
+		\setstretch{1.3}
 		\begin{itemize}
-			\setstretch{1.5}
-			\item Circuit inspection identifies causes of false positives.
-			\item Model refinement is applied only to implicated sub-components.
-			\item Evaluation metrics:
+			\item \textbf{The Bottleneck:} Traditional NIDS are "Black Boxes"—fixing one error often requires retraining the entire model.
+			
+			\vspace{0.6em}
+			
+			\item \textbf{ACDC-Enabled Debugging:}
 			\begin{itemize}
-				\setstretch{1.2}
-				\item KL divergence under ablation,
-				\item detection accuracy preservation,
-				\item circuit sparsity.
+				\item \textbf{Pinpoint:} Identify the specific sub-circuit responsible for a false alert.
+				\item \textbf{Causal Validation:} Confirm the error using activation patching with "clean" baseline traffic.
+				\item \textbf{Targeted Update:} Refine only the implicated nodes, leaving the rest of the model's logic intact.
+			\end{itemize}
+			
+			\vspace{0.6em}
+			
+			\item \textbf{Operational Value:} 
+			\begin{itemize}
+				\item Faster time-to-patch for SOC teams.
+				\item Eliminates the risk of "catastrophic forgetting" during global retraining.
 			\end{itemize}
 		\end{itemize}
 	\end{frame}
 	
-	\begin{frame}{Evaluating ACDC-Based NIDS: Faithfulness}
+	\begin{frame}{Evaluation: Quantifying Model Trust}
+		\setstretch{1.4}
 		\begin{itemize}
-			\setstretch{1.4}
-			
-			\item \textbf{Faithfulness:}
-			Does the extracted circuit behave like the full NIDS?
-			
-			\item \justifying \textbf{KL Divergence:}
-			Low divergence indicates preservation of detection logic.
-			
-			\item \justifying \textbf{Logit Margin:}
-			Drop in attack–benign confidence reveals causally important edges.
-			
-			\item \textbf{Sparsity:}
-			Fewer retained edges imply higher interpretability.
+			\item \textbf{How do we know the refined circuit is reliable?}
+			\vspace{0.8em}
+			\item \textbf{Faithfulness ($D_{KL}$):} Does the simplified circuit still "think" like the full model?
+			\item \textbf{Robustness (Accuracy):} Does detection remain high after we prune the "noise"?
+			\item \textbf{Interpretability (Sparsity):} Is the circuit small enough for a human to audit in under 60 seconds?
 		\end{itemize}
 	\end{frame}
 	
-	\begin{frame}{Grounded Evaluation in NIDS}
+	\begin{frame}{Step 1: Faithfulness \& Complexity}
+		\setstretch{1.4}
 		\begin{itemize}
-			\setstretch{1.4}
+			\item \textbf{KL Divergence ($D_{KL}$):} Measures the informational "loss" when moving from the full model to the circuit.
+			\begin{itemize}
+				\item \textit{Goal:} $D_{KL} \approx 0$ indicates the circuit logic is identical to the model.
+			\end{itemize}
 			
-			\item \textbf{Recovery Quality:}
-			Does the circuit retain true attack-relevant logic?
+			\vspace{0.5em}
 			
-			\item \justifying \textbf{ROC-AUC:}
-			Measures separation between relevant and irrelevant components.
+			\item \textbf{Logit Margin Analysis:} Measures how much the model's "confidence" drops when specific edges are ablated.
 			
-			\item \justifying \textbf{Clean vs Corrupted Traffic:}
-			Correct circuits detect attacks only when malicious features are present.
+			\vspace{0.5em}
 			
-			\item \textbf{Q1 / Q2 Check:}
-			Correct logic retained, spurious logic excluded.
+			\item \textbf{Circuit Sparsity (Efficiency):} 
+			\begin{itemize}
+				\item Focuses on the "Occam's Razor" of security: The simplest explanation is usually the most auditable.
+				\item Metric: Percentage of edges pruned while maintaining accuracy.
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Step 2: Operational Validation in NIDS}
+		\setstretch{1.4}
+		\begin{itemize}
+			\item \textbf{Recovery Quality:} Proof that the circuit captures the \textit{actual} attack signatures, not just random noise.
+			
+			\vspace{0.5em}
+			
+			\item \textbf{Corrupted Traffic Stress Test:} 
+			\begin{itemize}
+				\item Does the circuit break if we corrupt a malicious feature?
+				\item If yes, the circuit has successfully identified a \textbf{causal feature}.
+			\end{itemize}
+			
+			\vspace{0.5em}
+			
+			\item \textbf{Q1/Q2 Logical Integrity:}
+			\begin{itemize}
+				\item \textbf{Q1 (Sufficiency):} Is the circuit enough to detect the attack?
+				\item \textbf{Q2 (Minimality):} Does removing any more edges break the detection?
+			\end{itemize}
 		\end{itemize}
 	\end{frame}
 	
@@ -578,14 +580,24 @@
 	
 	
 	% Slide 25
-	\begin{frame}{Future Directions}
+	\begin{frame}{Future Directions: The Roadmap to Trusted NIDS}
 		\begin{itemize}
-			\setstretch{1.5}
-			\item \justifying Scalable and approximate ACDC methods for high-speed network environments.
-			\item Circuit discovery under redundancy and overlapping attack logic.
-			\item Circuit-to-rule translation for deployment in SOC workflows.
-			\item Behavioral analysis of zero-day attacks using circuit-level explanations.
-			\item Human-in-the-loop refinement of interpretability for trusted NIDS.
+			\item \textbf{Vision:} Moving from black-box detection to an auditable, interactive security ecosystem.
+			
+			\vspace{1em}
+			
+			\item \textbf{Real-Time Scalability} \\
+			Approximate ACDC and attribution patching for high-throughput, active network environments.
+			
+			\vspace{0.8em}
+			
+			\item \textbf{Advanced Threat Discovery} \\
+			Zero-day behavioral analysis and resolving "OR-Gate" redundancy in overlapping attack logic.
+			
+			\vspace{0.8em}
+			
+			\item \textbf{The Human-in-the-Loop SOC} \\
+			Automated circuit-to-rule translation and interactive tools for AI-driven decision refinement.
 		\end{itemize}
 	\end{frame}
 	
