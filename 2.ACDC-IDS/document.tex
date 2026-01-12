@@ -43,7 +43,7 @@
 	
 	\begin{frame}{Motivation: The Interpretability Gap in Network Security}
 		\begin{itemize}
-			\setstretch{1.4}
+			\setstretch{1.6}
 			\item \justifying Modern network security systems increasingly rely on
 			\textbf{deep learning } models for automated threat detection.
 			
@@ -59,31 +59,6 @@
 			\item \justifying Motivation:
 			\textbf{causal interpretability} > correlational explanations.
 		\end{itemize}
-	\end{frame}
-	
-	% Slide 2
-	\begin{frame}{What is a Network Intrusion Detection System (NIDS)}
-		\justifying
-		\setstretch{1.3}
-		\begin{itemize}
-			\item \justifying A \textbf{Network Intrusion Detection System (NIDS)} monitors
-			network traffic to identify \textbf{malicious activities or intrusions}.
-			
-			\item \justifying It analyzes \textbf{packets, flows, and traffic patterns}
-			traversing the network.
-			
-			\item \justifying NIDS raises alerts when observed traffic deviates from
-			\textbf{normal or expected behavior}.
-			
-			\item \justifying It supports \textbf{Security Operations Centers (SOC)}
-			in detecting attacks such as DoS, scanning, malware, and data exfiltration.
-		\end{itemize}
-		
-		\vspace{0.3cm}
-		\textbf{Key idea:}
-		\begin{center}
-			``Is this network traffic normal or malicious?''
-		\end{center}
 	\end{frame}
 	
 	\begin{frame}{Network Intrusion Detection System (NIDS)}
@@ -145,58 +120,90 @@
 	
 	% Slide 4
 	\begin{frame}{Applying ACDC to NIDS: Core Idea}
+		\setstretch{1.6}
 		\begin{itemize}
-			\setstretch{1.4}
 			\item In NIDS, the target behavior is an \textbf{attack detection decision}
-			(e.g., SYN flood, scan, exfiltration).
+			(e.g., SYN flood, scan).
 			
-			\item ACDC treats the trained NIDS as a \textbf{signal-processing system}
-			that transforms raw traffic statistics into security decisions.
+			\item \justifying ACDC treats the trained NIDS as a \textbf{signal-processing system}
+			mapping traffic statistics to decisions.
 			
-			\item The objective is to identify the \textbf{minimal internal computation}
-			that maps:
-			\begin{itemize}
-				\item traffic patterns (rates, flags, temporal bursts)
-				\item to an attack-specific alert.
-			\end{itemize}
+			\item\justifying The goal is to identify the \textbf{minimal internal computation}.
 			
-			\item The extracted circuit reveals \textbf{which traffic characteristics}
-			and \textbf{which internal interactions} the NIDS truly relies on.
+			\item\justifying The extracted circuit reveals the \textbf{features and interactions}
+			that causally drive detection.
 		\end{itemize}
+		
 	\end{frame}
 	
 	% --- SECTION 2: TECHNICAL FRAMEWORK ---
 	\section{Technical Framework}
 	
-	% Slide 5
-	\begin{frame}{Mapping ACDC Concepts to NIDS}
+	\begin{frame}{High-Level System Architecture}
+		\begin{itemize}
+			\setstretch{1.6}
+			\item \textbf{Data Plane:} Real-time packet ingestion and feature engineering.
+			\item \textbf{Inference Plane:} Modular neural Network Intrusion Detection System.
+			\item \textbf{Diagnostic Plane:} On-demand ACDC engine for causal analysis.
+			\item \justifying Planes are \textbf{decoupled} to preserve throughput and reliability.
+		\end{itemize}
+		\vspace{0.3cm}
 		\centering
-		\small
-		\renewcommand{\arraystretch}{1.5}
-		\begin{tabular}{|p{3.5cm}|p{5.5cm}|}
-			\hline
-			\textbf{ACDC Concept} & \textbf{Interpretation in NIDS} \\
-			\hline
-			Behavior &
-			Specific attack type (e.g., DDoS, Scan, Brute Force) \\
-			\hline
-			Computational Graph &
-			NIDS model layers and feature interactions \\
-			\hline
-			Activation Patching &
-			Replacing malicious traffic activations with benign baselines \\
-			\hline
-			Edge Pruning &
-			Removing causally irrelevant feature pathways \\
-			\hline
-			Circuit &
-			Minimal computation responsible for attack detection \\
-			\hline
-			Faithfulness Metric &
-			KL divergence between full and pruned model outputs \\
-			\hline
-		\end{tabular}
+		\textit{Interpretability is treated as a diagnostic service, not an inline requirement.}
 	\end{frame}
+	
+	\begin{frame}{Data Plane: Ingestion and Feature Engineering}
+		\begin{itemize}
+			\setstretch{1.4}
+			\item \textbf{Packet Broker:} Zeek / Suricata tap live network traffic.
+			\item \textbf{Stream Processor:} Kafka or Spark Streaming aggregates packets into flows.
+			\item \textbf{Computed Features:}
+			\begin{itemize}
+				\item Packet rate
+				\item Protocol flags
+				\item Byte and payload statistics
+			\end{itemize}
+			\item \textbf{State Store:} Redis or Cassandra maintains temporal context
+			(e.g., SYN count over last 10 seconds).
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Inference Plane: Modular Neural NIDS}
+		\begin{itemize}
+			\setstretch{1.5}
+			\item Model implemented as a \textbf{modular computational graph}.
+			\item Each logical feature group corresponds to a \textbf{distinct sub-network}.
+			\item Enables node-level intervention required by ACDC.
+			\item \textbf{Shadow Mode:}
+			\begin{itemize}
+				\item Model runs continuously.
+				\item High-risk alerts trigger logging of internal activations.
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Diagnostic Plane: ACDC Engine}
+		\begin{itemize}
+			\setstretch{1.3}
+			\item Activated \textbf{only for high-confidence alerts}.
+			\item Receives:
+			\begin{itemize}
+				\item Flow identifier
+				\item Full internal activation trace
+			\end{itemize}
+			\item \textbf{Activation Patching Controller:}
+			\begin{itemize}
+				\item Injects baseline (benign) activations.
+				\item Performs counterfactual tests.
+			\end{itemize}
+			\item \textbf{Circuit Extractor:}
+			\begin{itemize}
+				\item Prunes non-causal edges.
+				\item Outputs minimal causal subgraph.
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
 	
 	% Slide 8
 	\begin{frame}{System Architecture: ACDC-Enabled NIDS}
@@ -208,6 +215,21 @@
 			%ACDC-based circuit discovery}
 	\end{frame}
 	
+	\begin{frame}{Automated Circuit Discovery Loop}
+		\begin{enumerate}
+			\setstretch{1.3}
+			\item Input: Malicious flow $x_m$, benign flow $x_b$.
+			\item Forward pass: record all node activations.
+			\item Patch each edge with benign activations.
+			\item Measure output divergence (KL divergence).
+			\item If divergence $< \epsilon$, mark edge as non-causal.
+			\item Recursively prune graph.
+		\end{enumerate}
+		\vspace{0.2cm}
+		\centering
+		\textit{Result: a minimal circuit sufficient to explain the alert.}
+	\end{frame}
+	
 	% Slide 9
 	\begin{frame}{Step A: Task and Dataset Setup}
 		To find a circuit, we must define the behavior:
@@ -217,8 +239,9 @@
 		\end{block}
 		\vspace{0.5cm}
 		\begin{itemize}
-			\item \textbf{Clean Dataset:} Malicious traffic samples.
-			\item \textbf{Corrupted Dataset:} Normal baseline traffic or mean-ablated features.
+			\item \textbf{Behavior-Preserving Dataset:} Malicious traffic samples
+			
+			\item \textbf{	Behavior-Breaking Dataset:} Normal baseline traffic
 		\end{itemize}
 		\vspace{0.25cm}
 		\justifying Behavior is quantified using the logit difference between Attack and Normal classes.
@@ -324,8 +347,8 @@
 	% Slide 13
 	\begin{frame}{Research: Generalization vs. Spurious Correlation}
 		\begin{itemize}
-			\setstretch{1.5}
-			\item Does the train NIDS learn \textbf{attack-relevant traffic patterns}
+			\setstretch{1.6}
+			\item Does the trained NIDS learn \textbf{attack-relevant traffic patterns}
 			(e.g., TCP flags, packet-rate bursts, temporal structure)?
 			
 			\item Or does it rely on \textbf{incidental identifiers}
@@ -333,9 +356,7 @@
 			
 			\item ACDC reveals whether the extracted circuit encodes
 			\textbf{robust attack semantics} or shortcut-based correlations.
-			
-			\item This analysis helps distinguish \textbf{true generalization}
-			from spurious detection behavior.
+		
 		\end{itemize}
 	\end{frame}
 	
@@ -385,37 +406,18 @@
 		%\end{itemize}
 %	\end{frame}
 	
-	% Slide 17
-	\begin{frame}{Technical Challenge: Scalability}
-		\setstretch{1.5}
-		\justifying
-		
-		\begin{itemize}
-			\item \justifying  Activation patching is computationally expensive
-			for high-throughput network traffic.
-			
-			\item \justifying \textbf{Research Focus:}
-			Attribution patching to approximate circuit importance
-			with significantly reduced computational cost.
-			
-			\item \justifying As a result, ACDC is currently suited for
-			\textbf{offline analysis and post-incident investigation},
-			rather than inline detection.
-		\end{itemize}
-	\end{frame}
-	
 	% Slide 18
-	\begin{frame}{Failure Case: The OR-Gate Problem}
+	\begin{frame}{Logic Redundancy Discovery: The OR-Gate Problem}
 		\begin{itemize}
-			\setstretch{1.35}
+			\setstretch{1.5}
 			
-			\item \textbf{Redundancy:}
+			\item \justifying \textbf{Redundancy:}
 			A NIDS may learn multiple internal pathways that independently detect the same attack.
 			
-			\item \textbf{Pruning Risk:}
+			\item \justifying \textbf{Pruning Risk:}
 			If removing one pathway does not affect performance, ACDC may prune both during causal testing.
 			
-			\item \textbf{Interpretation:}
+			\item \justifying \textbf{Interpretation:}
 			This reflects redundancy in detection logic—not model failure.
 			
 			\item \textbf{Research Challenge:}
@@ -423,20 +425,31 @@
 		\end{itemize}
 	\end{frame}
 	
+	% Slide 17
+	\begin{frame}{Scalability via an Asynchronous Forensic Pipeline}
+		\begin{itemize}
+			\setstretch{1.5}
+			\item \justifying \textbf{Decoupled Design:}
+			ACDC functions as a diagnostic service, separate from inline detection.
+			
+			\item \justifying \textbf{Parallel Execution:}
+			Real-time inference and causal circuit discovery run in independent planes.
+			
+			\item \justifying \textbf{No Impact on Inline Detection:}
+			Activation patching is isolated, preserving throughput and latency.
+			
+			\item \justifying \textbf{Efficient Discovery:}
+			Attribution patching reduces computational cost.
+			
+			\item \textbf{Flow:}
+			\textit{Detect} $\rightarrow$ \textit{Trigger} $\rightarrow$ \textit{Explain}.
+		\end{itemize}
+	\end{frame}
+	
 	
 	% --- SECTION 4: SOC OPERATIONS ---
 	\section{SOC-Oriented Integration}
-	
-	% Slide 19
-	\begin{frame}{SOC Integration: System Design}
-		\centering
-		\includegraphics[width=1\textwidth]{3.png}
-		
-		{\scriptsize
-			System architecture integrating deep learning NIDS with
-			ACDC-based circuit discovery}
-	\end{frame}
-	
+
 	% Slide 20
 	\begin{frame}{SOC Integration: Transparent Alerts}
 		\textbf{\color{red}{Traditional Alert:}} \textit{Anomaly detected}
@@ -449,17 +462,65 @@
 		Circuits are summarized, not shown raw, to analysts.
 	\end{frame}
 	
-	% Slide 2
-	\begin{frame}{Deep-Dive Forensic Investigation}
-		\setstretch{1.4}
+		\begin{frame}{SOC Analyst View}
 		\begin{itemize}
-			\setstretch{1.5}
-			\item \justifying \textbf{Causal Visibility:} For every "Transparent Alert," ACDC allows analysts to expand the view to see the \textbf{internal detection circuit}.
-			
-			\item \justifying \textbf{Behavioral Logic:} Analysts can inspect exactly which traffic patterns (e.g., specific packet headers or temporal spikes) interacted to trigger the model's "high-risk" state.
-			
-			\item  \textbf{Incident Attribution:} Supports faster identification of \textbf{Zero-Day threats} by identifying novel circuit structures that don't match known attack signatures.
+			\setstretch{1.3}
+			\item Visual graph with \textbf{causal path highlighted}.
+			\item Node-level attribution replaces feature-only explanations.
+			\item Automatic rule translation:
+			\\
+			\vspace{1cm}
+			\begin{quote}
+				\small
+				``This alert was triggered by a sustained spike in byte counts
+				while TCP flags remained in a SYN-SENT state.''
+			\end{quote}
 		\end{itemize}
+	\end{frame}
+	
+	% Slide 19
+	\begin{frame}{SOC Integration: System Design}
+		\centering
+		\includegraphics[width=1\textwidth]{3.png}
+		
+		{\scriptsize
+			System architecture integrating deep learning NIDS with
+			ACDC-based circuit discovery}
+	\end{frame}
+	
+	\begin{frame}{Technical Implementation Roadmap}
+		\centering
+		\renewcommand{\arraystretch}{1.3}
+		\scriptsize
+		\begin{tabular}{@{}p{1.2cm} p{3cm} p{5.5cm}@{}}
+			\toprule
+			\textbf{Phase} & \textbf{Task} & \textbf{Tools / Technologies} \\
+			\midrule
+			Phase 1 &
+			Model Instrumentation &
+			Hooking internal layers to capture node activations using
+			PyTorch / TensorFlow forward hooks \\
+			
+			Phase 2 &
+			Circuit Discovery Loop &
+			Implementing the $\tau$-based pruning criterion using
+			KL divergence to remove non-causal edges \\
+			
+			Phase 3 &
+			Streaming Integration &
+			Connecting the ACDC engine to live traffic pipelines
+			via Kafka, Zeek, or Suricata for asynchronous forensics \\
+			
+			Phase 4 &
+			SOC API Layer &
+			Building REST APIs that expose causal circuits
+			to the SOC dashboard as structured, auditable graphs \\
+			\bottomrule
+		\end{tabular}
+		
+		\vspace{0.45cm}
+		\centering
+		\textit{Each phase incrementally bridges real-time detection and causal interpretability.}
 	\end{frame}
 	
 	\begin{frame}{Circuit Level Debugging for NIDS Models}
@@ -497,29 +558,7 @@
 		\end{itemize}
 	\end{frame}
 	
-	\begin{frame}{Step 1: Faithfulness \& Complexity}
-		\setstretch{1.4}
-		\begin{itemize}
-			\item \textbf{KL Divergence ($D_{KL}$):} Measures the informational "loss" when moving from the full model to the circuit.
-			\begin{itemize}
-				\item \textit{Goal:} $D_{KL} \approx 0$ indicates the circuit logic is identical to the model.
-			\end{itemize}
-			
-			\vspace{0.5em}
-			
-			\item \textbf{Logit Margin Analysis:} Measures how much the model's "confidence" drops when specific edges are ablated.
-			
-			\vspace{0.5em}
-			
-			\item \textbf{Circuit Sparsity (Efficiency):} 
-			\begin{itemize}
-				\item Focuses on the "Occam's Razor" of security: The simplest explanation is usually the most auditable.
-				\item Metric: Percentage of edges pruned while maintaining accuracy.
-			\end{itemize}
-		\end{itemize}
-	\end{frame}
-	
-	\begin{frame}{Step 2: Operational Validation in NIDS}
+	\begin{frame}{Operational Validation in NIDS}
 		\setstretch{1.4}
 		\begin{itemize}
 			\item \textbf{Recovery Quality:} Proof that the circuit captures the \textit{actual} attack signatures, not just random noise.

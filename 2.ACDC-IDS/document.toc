@@ -1,5 +1,5 @@
 \beamer@sectionintoc {1}{Motivation \& Background}{3}{0}{1}
-\beamer@sectionintoc {2}{Technical Framework}{8}{0}{2}
-\beamer@sectionintoc {3}{Research Applications}{14}{0}{3}
-\beamer@sectionintoc {4}{SOC-Oriented Integration}{19}{0}{4}
-\beamer@sectionintoc {5}{Conclusion}{27}{0}{5}
+\beamer@sectionintoc {2}{Technical Framework}{7}{0}{2}
+\beamer@sectionintoc {3}{Research Applications}{17}{0}{3}
+\beamer@sectionintoc {4}{SOC-Oriented Integration}{22}{0}{4}
+\beamer@sectionintoc {5}{Conclusion}{30}{0}{5}
