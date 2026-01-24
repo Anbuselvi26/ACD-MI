@@ -9,9 +9,20 @@
 \usepackage{ragged2e}
 \usepackage{booktabs}
 \usepackage{lmodern}
-\usepackage[backend=biber,style=ieee]{biblatex}
+\usepackage[
+backend=biber,
+style=numeric
+]{biblatex}
+\usepackage{csquotes}
+\setbeamertemplate{bibliography item}[text]
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	citecolor=blue,
+	urlcolor=blue
+}
+
 \addbibresource{references.bib}
-\usepackage{hyperref}
 
 % --- Meta Data ---
 \title[ACDC for NIDS]{Automated Circuit Discovery for NIDS}
@@ -57,7 +68,8 @@
 			raises an alert, not just \emph{that} it raises one.
 			
 			\item \justifying Motivation:
-			\textbf{causal interpretability} > correlational explanations.
+			\textbf{causal interpretability} > correlational explanations. \tiny \cite{ahmed2021explainable,xin2022xaiids}
+			
 		\end{itemize}
 	\end{frame}
 	
@@ -67,7 +79,8 @@
 		
 		\vspace{0.2cm}
 		\scriptsize
-		High-level architecture of a Network Intrusion Detection System.
+		High-level architecture of a Network Intrusion Detection System. \tiny \cite{conmy2023acdc}
+		
 	\end{frame}
 	
 	% Slide 3
@@ -123,7 +136,7 @@
 		\setstretch{1.6}
 		\begin{itemize}
 			\item In NIDS, the target behavior is an \textbf{attack detection decision}
-			(e.g., SYN flood, scan).
+			(e.g., SYN flood, scan). 
 			
 			\item \justifying ACDC treats the trained NIDS as a \textbf{signal-processing system}
 			mapping traffic statistics to decisions.
@@ -131,7 +144,8 @@
 			\item\justifying The goal is to identify the \textbf{minimal internal computation}.
 			
 			\item\justifying The extracted circuit reveals the \textbf{features and interactions}
-			that causally drive detection.
+			that causally drive detection. \tiny\cite{conmy2023acdc,lyle2023efficient}
+			
 		\end{itemize}
 		
 	\end{frame}
@@ -149,7 +163,8 @@
 		\end{itemize}
 		\vspace{0.3cm}
 		\centering
-		\textit{Interpretability is treated as a diagnostic service, not an inline requirement.}
+		\textit{Interpretability is treated as a diagnostic service, not an inline requirement.} \tiny \cite{ahmed2021explainable}
+		
 	\end{frame}
 	
 	\begin{frame}{Data Plane: Ingestion and Feature Engineering}
@@ -355,7 +370,7 @@
 			(e.g., source IPs, ports, or dataset-specific artifacts)?
 			
 			\item ACDC reveals whether the extracted circuit encodes
-			\textbf{robust attack semantics} or shortcut-based correlations.
+			\textbf{robust attack semantics} or shortcut-based correlations. \cite{ahmed2021explainable}
 		
 		\end{itemize}
 	\end{frame}
@@ -554,7 +569,8 @@
 			\vspace{0.8em}
 			\item \textbf{Faithfulness ($D_{KL}$):} Does the simplified circuit still "think" like the full model?
 			\item \textbf{Robustness (Accuracy):} Does detection remain high after we prune the "noise"?
-			\item \textbf{Interpretability (Sparsity):} Is the circuit small enough for a human to audit in under 60 seconds?
+			\item \textbf{Interpretability (Sparsity):} Is the circuit small enough for a human to audit in under 60 seconds? \tiny \cite{conmy2023acdc}
+			
 		\end{itemize}
 	\end{frame}
 	
@@ -638,6 +654,11 @@
 			\item \textbf{The Human-in-the-Loop SOC} \\
 			Automated circuit-to-rule translation and interactive tools for AI-driven decision refinement.
 		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{References}
+		\justifying
+		\printbibliography
 	\end{frame}
 	
 	\begin{frame}
